@@ -117,45 +117,8 @@ SELECT
 FROM
     employees
 WHERE
-    (salary * commission_pct) > (
-    SELECT
-        (salary * 0.20) * 12
-    FROM
-        employees
-    WHERE
-        job_id = 'AD_PRES'
-)
-
-SELECT last_name,first_name , department_name 
-FROM employees e 
-JOIN departments d on e.department_id= d.department_id
-WHERE e.employee_id NOT IN  ( 
-    SELECT employee_id 
-    FROM job_history);
-
-    SELECT e.last_name,
-       e.first_name,
-       d.department_name
-FROM employees e
-JOIN departments d 
-       ON e.department_id = d.department_id
-LEFT JOIN job_history jh 
-       ON e.employee_id = jh.employee_id
-WHERE jh.employee_id IS NULL;
-
--- Listar los empleados cuyo salario sea mayor al salario promedio de su departamento.
-SELECT *
-FROM employees e
-WHERE salary >
-	(SELECT AVG(salary)
-     FROM employees
-     WHERE department_id = e.department_id);
-
--- Listar cada departamento junto al empleado mejor pagado de ese departamento.
-SELECT e.first_name, e.last_name, e.department_id
-FROM employees e
-WHERE salary = (
-    SELECT MAX(salary)
-    FROM employees
-    WHERE department_id = e.department_id
-);
+    (salary * commission_pct * 12) > (
+        SELECT salary * 12 * 0.20
+        FROM employees
+        WHERE job_id = 'AD_PRES'
+    );
